@@ -11,9 +11,9 @@ namespace COmpStore.Models.Entities.ViewModels.Base
         public int SubCategoryId { get; set; }
         [Display(Name = "SubCategory")]
         public string SubCategoryName { get; set; }
-        //public int PublisherId { get; set; }
-        //[Display(Name = "PublisherName")]
-        //public string PublisherName { get; set; }
+        public int PublisherId { get; set; }
+        [Display(Name = "PublisherName")]
+        public string PublisherName { get; set; }
         public int ProductId { get; set; }
         [MaxLength(3800)]
         public string Description { get; set; }

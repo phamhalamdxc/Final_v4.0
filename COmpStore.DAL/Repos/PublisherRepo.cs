@@ -2,6 +2,7 @@
 using COmpStore.DAL.Repos.Base;
 using COmpStore.DAL.Repos.Interfaces;
 using COmpStore.Models.Entities;
+using COmpStore.Models.ViewModels.Base;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,7 @@ namespace COmpStore.DAL.Repos
 
         public IEnumerable<Publisher> GetAllWithProductsByPublisher()
             => Table.Include(x => x.Products);
+        
 
     }
 }

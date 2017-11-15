@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using COmpStore.DAL.Repos.Interfaces;
 using COmpStore.Models.Entities.ViewModels.Base;
+using COmpStore.Models.ViewModels.Base;
 
 namespace COmpStoreApi.Controllers
 {
@@ -20,6 +21,8 @@ namespace COmpStoreApi.Controllers
         [HttpGet]
         public IEnumerable<ProductAndSubCategoryBase> Get()
             => Repo.GetAllWithSubCategoryName().ToList();
+        [Route("[controller]/[action]")]
+       
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)

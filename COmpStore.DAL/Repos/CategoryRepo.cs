@@ -2,6 +2,7 @@
 using COmpStore.DAL.Repos.Base;
 using COmpStore.DAL.Repos.Interfaces;
 using COmpStore.Models.Entities;
+using COmpStore.Models.ViewModels.Base;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,8 @@ namespace COmpStore.DAL.Repos
 
         public override IEnumerable<Category> GetRange(int skip, int take)
             => GetRange(Table.OrderBy(x => x.CategoryName), skip, take);
+
+       
 
         public Category GetOneWithCategory(int? id)
             => Table.Include(x => x.SubCategories).FirstOrDefault(x => x.Id == id);

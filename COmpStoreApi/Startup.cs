@@ -88,8 +88,7 @@ namespace COmpStoreApi
             //    }
             //}
             app.UseCors("AllowAll");  // has to go before UseMvc
-
-            app.UseMvc();
+            app.UseStaticFiles();            app.UseMvc();
         }
     }
 }

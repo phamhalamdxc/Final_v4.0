@@ -47,11 +47,21 @@ namespace COmpStore.DAL.Repos
             => new ProductAndPublisherBase()
             {
 
+
                 PublisherName = pub.PublisherName,
                 PublisherId = p.PublisherId,
+                CurrentPrice = p.CurrentPrice,
+                Description = p.Description,
+                IsFeatured = p.IsFeatured,
                 Id = p.Id,
                 ProductName = p.ProductName,
-                
+                Number = p.Number,
+                ProductImage = p.ProductImage,
+                TimeStamp = p.TimeStamp,
+                UnitCost = p.UnitCost,
+                UnitsInStock = p.UnitsInStock
+
+
             };
 
 
@@ -61,6 +71,11 @@ namespace COmpStore.DAL.Repos
                 .Include(p => p.Publisher)
                 .Select(item => GetRecordPub(item, item.Publisher))
                 .OrderBy(x => x.ProductName);
+        public IEnumerable<ProductAndPublisherBase> GetAllWithPublisherName()
+           => Table
+               .Include(p => p.Publisher)
+               .Select(item => GetRecordPub(item, item.Publisher))
+               .OrderBy(x => x.ProductName);
         public IEnumerable<ProductAndSubCategoryBase> GetProductsForSubCategory(int id)
             => Table
                 .Where(p => p.SubCategoryId == id)
@@ -92,9 +107,10 @@ namespace COmpStore.DAL.Repos
         public IEnumerable<ProductAndSubCategoryBase> Search(string searchString)
             => Table
                 .Where(p =>
-                    p.Description.ToLower().Contains(searchString.ToLower())
-                    || p.ProductName.ToLower().Contains(searchString.ToLower()))
-                .Include(p => p.Publisher).Include(p =>p.SubCategory)
+                    p.SubCategory.SubCategoryName.ToLower().Contains(searchString.Trim().ToLower())
+                    ||p.Publisher.PublisherName.ToLower().Contains(searchString.Trim().ToLower())
+                    || p.ProductName.ToLower().Contains(searchString.Trim().ToLower()))
+                .Include(p =>p.SubCategory)
                 .Select(item => GetRecordSub(item, item.SubCategory))
                 .OrderBy(x => x.ProductName);
     }

@@ -1,4 +1,5 @@
-﻿using COmpStoreClient.ViewModels.Base;
+﻿using COmpStoreClient.Validation;
+using COmpStoreClient.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ namespace COmpStoreClient.ViewModels
 {
     public class AddToCartViewModel : CartViewModelBase
     {
+        [MustNotBeGreaterThan(nameof(UnitsInStock)), MustBeGreaterThanZero]
         public int Quantity { get; set; }
     }
 }
