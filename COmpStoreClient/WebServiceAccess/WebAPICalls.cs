@@ -89,7 +89,7 @@ namespace COmpStoreClient.WebServiceAccess
         }
         public async Task<Category> GetCategoryAsync(int id)
         {
-            //http://localhost:40001/api/subcategory/{id}
+            //http://localhost:40001/api/category/{id}
             return await GetItemAsync<Category>($"{CategoryBaseUri}{id}");
         }
 
@@ -129,6 +129,7 @@ namespace COmpStoreClient.WebServiceAccess
             var uri = $"{PublisherBaseUri}{publisherId}/products";
             return await GetItemListAsync<ProductAndPublisherBase>(uri);
         }
+        
         //Customers
         public async Task<IList<Customer>> GetCustomersAsync()
         {
