@@ -10,10 +10,12 @@ namespace COmpStoreClient.Controllers
     public class CategoriesController : Controller
     {
         private readonly IWebApiCalls _webApiCalls;
+
         public CategoriesController(IWebApiCalls webApiCalls)
         {
             _webApiCalls = webApiCalls;
         }
 
+      
     }
 }

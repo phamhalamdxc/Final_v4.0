@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using COmpStore.Models.ViewModels.ProductAdmin;
+using COmpStore.Models.ViewModels.Paging;
 
 namespace COmpStore.DAL.Repos
 {
@@ -51,7 +53,7 @@ namespace COmpStore.DAL.Repos
                 PublisherId = p.PublisherId,
                 Id = p.Id,
                 ProductName = p.ProductName,
-                
+
             };
 
 
@@ -94,8 +96,43 @@ namespace COmpStore.DAL.Repos
                 .Where(p =>
                     p.Description.ToLower().Contains(searchString.ToLower())
                     || p.ProductName.ToLower().Contains(searchString.ToLower()))
-                .Include(p => p.Publisher).Include(p =>p.SubCategory)
+                .Include(p => p.Publisher).Include(p => p.SubCategory)
                 .Select(item => GetRecordSub(item, item.SubCategory))
                 .OrderBy(x => x.ProductName);
+
+        //======================================================================================================
+        public IEnumerable<ProductAdminIndex> GetProductAdminIndex1() 
+            => Table.Select(x => new ProductAdminIndex
+        {
+            Id = x.Id,
+            ProductImage = x.ProductImage,
+            Name = x.ProductName,
+            UnitsInStock = x.UnitsInStock
+        });
+        public string GetImageProduct(int id) 
+            => Table.SingleOrDefault(p => p.Id == id).ProductImage;
+
+        public int UpdateExceptImage(Product product, bool persist = true)
+        {
+            Db.Products.Attach(product);
+            Db.Entry(product).State = EntityState.Modified;
+            Db.Entry(product).Property(x => x.ProductImage).IsModified = false;
+            return persist ? SaveChanges() : 0;
+        }
+
+        public PageOutput<ProductAdminIndex> GetProductAdminIndex(int pageNumber = 1, int pageSize = 2)
+            => new PageOutput<ProductAdminIndex>
+            {
+                TotalPage = (Table.Count() % pageSize == 0) ? (Table.Count() / pageSize) : (Table.Count() / pageSize  + 1),
+                PageNumber = pageNumber,
+                Items = Table.Skip((pageNumber - 1) * pageSize).Take(pageSize).Select(p => new ProductAdminIndex
+                {
+                    Id = p.Id,
+                    Name = p.ProductName,
+                    ProductImage = p.ProductImage,
+                    UnitsInStock = p.UnitsInStock
+                }).ToList()
+            };
+        //======================================================================================================
     }
 }

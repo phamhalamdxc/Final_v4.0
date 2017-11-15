@@ -17,6 +17,7 @@ namespace COmpStore.Models.Entities
         public int CategoryId { get; set; }
         [ForeignKey(nameof(CategoryId))]
         public Category Category { get; set; }
+
         public List<Product> Products { get; set; } = new List<Product>();
 
     }

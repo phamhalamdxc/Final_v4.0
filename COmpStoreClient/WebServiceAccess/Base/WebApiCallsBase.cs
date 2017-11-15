@@ -3,7 +3,9 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,6 +21,7 @@ namespace COmpStoreClient.WebServiceAccess.Base
         protected readonly string PublisherBaseUri;
         protected readonly string ProductBaseUri;
         protected readonly string OrdersBaseUri;
+        protected string Token;
 
         protected WebApiCallsBase(IWebServiceLocator settings)
         {
@@ -32,13 +35,23 @@ namespace COmpStoreClient.WebServiceAccess.Base
             OrdersBaseUri = $"{ServiceAddress}api/orders/";
         }
 
+       
+
         internal async Task<string> GetJsonFromGetResponseAsync(string uri)
         {
             try
             {
                 using (var client = new HttpClient())
                 {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
                     var response = await client.GetAsync(uri);
+
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new WebException();
+                    }
+
                     if (!response.IsSuccessStatusCode)
                     {
                         throw new Exception($"The Call to {uri} failed.  Status code: {response.StatusCode}");
@@ -90,6 +103,12 @@ namespace COmpStoreClient.WebServiceAccess.Base
             try
             {
                 var response = await task;
+
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new WebException();
+                }
+
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new Exception($"The Call to {uri} failed.  Status code: {response.StatusCode}");
@@ -114,6 +133,7 @@ namespace COmpStoreClient.WebServiceAccess.Base
         {
             using (var client = new HttpClient())
             {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
                 var task = client.PostAsync(uri, CreateStringContent(json));
                 return await ExecuteRequestAndProcessResponse(uri, task);
             }
@@ -123,6 +143,7 @@ namespace COmpStoreClient.WebServiceAccess.Base
         {
             using (var client = new HttpClient())
             {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
                 //var requestMessage = new HttpRequestMessage(HttpMethod.Put,uri);
                 //requestMessage.Content = CreateStringContent(json);
                 //var response = await client.SendAsync(requestMessage);
@@ -130,18 +151,21 @@ namespace COmpStoreClient.WebServiceAccess.Base
                 return await ExecuteRequestAndProcessResponse(uri, task);
             }
         }
-        protected async Task SubmitDeleteRequestAsync(string uri)
+
+        protected async Task<string> SubmitDeleteRequestAsync(string uri)
         {
             try
             {
                 using (var client = new HttpClient())
                 {
+                    
                     Task<HttpResponseMessage> deleteAsync = client.DeleteAsync(uri);
                     var response = await deleteAsync;
                     if (!response.IsSuccessStatusCode)
                     {
                         throw new Exception(response.StatusCode.ToString());
                     }
+                    return response.Content.ReadAsStringAsync().Result;
                 }
             }
             catch (Exception ex)
@@ -150,6 +174,12 @@ namespace COmpStoreClient.WebServiceAccess.Base
                 Console.WriteLine(ex);
                 throw;
             }
+        }
+
+        internal HttpClient SetTokenHeader(HttpClient client, string token)
+        {
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            return client;
         }
     }
 }

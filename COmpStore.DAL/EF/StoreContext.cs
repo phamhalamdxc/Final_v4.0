@@ -29,7 +29,7 @@ namespace COmpStore.DAL.EF
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer(
-            @"Server=HP-ELITEBOOK\SQLEXPRESS;Database=StoreContext;Trusted_Connection=True;MultipleActiveResultSets=true;");
+            @"Server=.;Database=StoreContext;Trusted_Connection=True;MultipleActiveResultSets=true;");
             }
         }
 

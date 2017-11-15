@@ -39,7 +39,10 @@
   <ItemGroup>
     <ProjectReference Include="..\COmpStore.DAL\COmpStore.DAL.csproj" />
     <ProjectReference Include="..\COmpStore.Models\COmpStore.Models.csproj" />
-    <ProjectReference Include="..\COmpStoreApi\COmpStoreApi.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\AdminCategory\" />
   </ItemGroup>
 
 </Project>

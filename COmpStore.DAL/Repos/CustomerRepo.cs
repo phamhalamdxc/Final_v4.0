@@ -25,6 +25,7 @@ namespace COmpStore.DAL.Repos
         public override IEnumerable<Customer> GetRange(int skip, int take)
             => GetRange(Table.OrderBy(x => x.FullName), skip, take);
 
+        public Customer GetCustomerByEmail(string email) => Table.SingleOrDefault(c => c.EmailAddress == email);
     }
 
 }

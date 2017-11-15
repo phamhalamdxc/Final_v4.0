@@ -15,6 +15,12 @@ namespace COmpStoreClient.Authentication
         {
             _webApiCalls = webApiCalls;
         }
+
+        public async Task<string> CheckPermission(string token)
+        {
+            return await _webApiCalls.CheckPermission(token);
+        }
+
         public Customer GetCustomerInfo()
         {
             return _webApiCalls.GetCustomersAsync().Result.FirstOrDefault();
